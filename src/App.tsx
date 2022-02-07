@@ -2,10 +2,21 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import { Navbar, Container } from 'react-bootstrap';
+import ReactPaginate from 'react-paginate';
 import PasteComponent from './components/Paste';
 
 function App() {
   const [pastes, setPastes] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
+
+  const pastesPerPage = 10;
+  const pastesVisited = pageNum * pastesPerPage;
+
+  const displayPastes = pastes
+    .slice(pastesVisited, pastesVisited + pastesPerPage)
+    .map((paste) => <PasteComponent paste={paste} />);
+
+  const pageCount = Math.ceil(pastes.length / pastesPerPage);
 
   async function getPastes() {
     try {
@@ -29,10 +40,15 @@ function App() {
           <Navbar.Brand>Dashboard</Navbar.Brand>
         </Container>
       </Navbar>
-      {console.log(pastes)}
-      {pastes.map((paste) => (
-        <PasteComponent paste={paste} />
-      ))}
+      {displayPastes}
+      <ReactPaginate
+        previousLabel="<"
+        nextLabel=">"
+        pageCount={pageCount}
+        onPageChange={({ selected }) => setPageNum(selected)}
+        containerClassName="pagination"
+        activeClassName="active"
+      />
     </div>
   );
 }
