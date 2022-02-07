@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import { Navbar, Container } from 'react-bootstrap';
+import PasteComponent from './components/Paste';
 
 function App() {
   const [pastes, setPastes] = useState([]);
@@ -23,11 +24,15 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar bg="dark" variant="dark">
+      <Navbar className="mb-3" bg="dark" variant="dark">
         <Container>
           <Navbar.Brand>Dashboard</Navbar.Brand>
         </Container>
       </Navbar>
+      {console.log(pastes)}
+      {pastes.map((paste) => (
+        <PasteComponent paste={paste} />
+      ))}
     </div>
   );
 }
