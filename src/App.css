@@ -48,3 +48,9 @@
   border: none;
   background-color: rgb(134, 223, 250);
 }
+
+.spinners {
+  width: 170px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}

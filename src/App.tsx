@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import { Navbar, Container } from 'react-bootstrap';
+import { Navbar, Container, Spinner } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import PasteComponent from './components/Paste';
 
 function App() {
   const [pastes, setPastes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
   const pastesPerPage = 10;
@@ -21,7 +22,7 @@ function App() {
   async function getPastes() {
     try {
       const response = await axios.get('http://localhost:8080/scrape');
-      if (response.data.pastes) {
+      if (response.data.pastes && response.data.pastes.length !== pastes.length) {
         setPastes(response.data.pastes);
       }
     } catch (error) {
@@ -31,7 +32,16 @@ function App() {
 
   useEffect(() => {
     getPastes();
+    setInterval(() => {
+      getPastes();
+    }, 120000);
   }, []);
+
+  useEffect(() => {
+    if (pastes.length > 0) {
+      setLoading(false);
+    }
+  }, [pastes]);
 
   return (
     <div className="App">
@@ -40,6 +50,15 @@ function App() {
           <Navbar.Brand>Dashboard</Navbar.Brand>
         </Container>
       </Navbar>
+      {loading && (
+        <div className="spinners">
+          <Spinner animation="grow" variant="primary" />
+          <Spinner animation="grow" variant="primary" />
+          <Spinner animation="grow" variant="primary" />
+          <Spinner animation="grow" variant="primary" />
+          <Spinner animation="grow" variant="primary" />
+        </div>
+      )}
       {displayPastes}
       <ReactPaginate
         previousLabel="<"
