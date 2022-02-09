@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import { Navbar, Container, Spinner } from 'react-bootstrap';
+import { Navbar, Container, Spinner, Form } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
 import PasteComponent from './components/Paste';
+import Stats from './components/Stats';
 
 function App() {
   const [pastes, setPastes] = useState([]);
+  const [stats, setStats] = useState({
+    General: 0,
+    Crypto: 0,
+    MaybeScams: 0,
+    Hacking: 0,
+    Market: 0,
+    IllegalAdultContent: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [pageNum, setPageNum] = useState(0);
 
@@ -24,6 +33,9 @@ function App() {
       const response = await axios.get('http://localhost:8080/scrape');
       if (response.data.pastes && response.data.pastes.length !== pastes.length) {
         setPastes(response.data.pastes);
+      }
+      if (response.data.stats) {
+        setStats(response.data.stats);
       }
     } catch (error) {
       console.log(error);
@@ -48,6 +60,7 @@ function App() {
       <Navbar className="mb-3" bg="dark" variant="dark">
         <Container>
           <Navbar.Brand>Dashboard</Navbar.Brand>
+          <Form.Control type="text" placeholder="Search by title" />
         </Container>
       </Navbar>
       {loading && (
@@ -59,6 +72,7 @@ function App() {
           <Spinner animation="grow" variant="primary" />
         </div>
       )}
+      <Stats percentage={stats} />
       {displayPastes}
       <ReactPaginate
         previousLabel="<"
