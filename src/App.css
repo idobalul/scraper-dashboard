@@ -54,3 +54,13 @@
   margin-left: 50%;
   transform: translateX(-50%);
 }
+
+.stats {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input {
+  width: 40vw;
+}

@@ -4,3 +4,12 @@ interface Paste {
   Author: string;
   Date: string;
 }
+
+interface Percentage {
+  General: number;
+  Hacking: number;
+  Crypto: number;
+  Market: number;
+  MaybeScams: number;
+  IllegalAdultContent: number;
+}
